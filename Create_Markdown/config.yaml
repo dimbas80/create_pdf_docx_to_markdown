@@ -1,0 +1,51 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Конфигурация Create_Markdown (конвертация PDF/DOCX → Markdown)
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ── Vision API (классификация изображений: формула или схема/график) ────
+# Используется для распознавания формул, встроенных в PDF/DOCX как картинки.
+vision:
+  primary:
+    # Провайдер: provod | openai | anthropic | openrouter
+    provider: provod
+    # API-ключ. Указывать явно (не через переменную окружения)
+    api_key: sk_b24c08ee2be90d958fe7cca65ee37dabe18eeddc95a1fab3
+    # Базовый URL API (для provod: https://api.provod.ai/v1, openai: https://api.openai.com/v1)
+    base_url: https://api.provod.ai/v1
+    # Модель для Vision-классификации
+    model: google/gemini-3.5-flash
+  fallback:
+    # Резервная модель (если primary недоступна)
+    # Может быть через другого провайдера
+    provider: provod
+    api_key: sk_b24c08ee2be90d958fe7cca65ee37dabe18eeddc95a1fab3
+    base_url: https://api.provod.ai/v1/chat/completions
+    model: anthropic/claude-sonnet-5
+
+# ── Постобработка (Claude, чистка Markdown-структуры, таблиц, списков) ──
+postprocess:
+  primary:
+    provider: provod
+    api_key: sk_b24c08ee2be90d958fe7cca65ee37dabe18eeddc95a1fab3
+    base_url: https://api.provod.ai/v1
+    # Модель для текстовой постобработки (рекомендуется: anthropic/claude-sonnet-5)
+    model: google/gemini-3.5-flash
+  fallback:
+    provider: provod
+    api_key: sk_b24c08ee2be90d958fe7cca65ee37dabe18eeddc95a1fab3
+    base_url: https://api.provod.ai/v1/chat/completions
+    model: anthropic/claude-sonnet-4.6
+
+# ── Режим оценки токенов ────────────────────────────────────────────────
+# auto  — обработка без подтверждения (для batch)
+# manual — после Docling показать оценку токенов и запросить [Y/n]
+mode: manual
+
+# ── Пакетная обработка ──────────────────────────────────────────────────
+# При enabled=true Create_Markdown.py обрабатывает все PDF/DOCX из input/
+# и сохраняет результат в output/ (в подпапках с именами файлов).
+# При enabled=false Create_Markdown.py ждёт -i file.ext.
+batch:
+  enabled: false
+  input: /mnt/sdb/База_ГОСТ
+  output: /mnt/sdb/Markdown
