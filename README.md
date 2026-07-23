@@ -89,53 +89,6 @@ python3 Create_Markdown.py
 
 ---
 
-### index_search/index_chromaDB.py
-**Индексация Markdown-документов в векторную базу ChromaDB** для RAG-поиска.
-
-- Эмбеддинг через **SiliconFlow Qwen3-Embedding-8B** (4096 dim)
-- Чанкование: по разделам (`##`) и таблицам, лимит 8000 токенов, с перекрытием 200 токенов
-- Коллекция: `gost_docs_qwen`
-
-```bash
-export SILICONFLOW_API_KEY="sk-..."
-python3 index_chromaDB.py --md-path document.md --dry-run
-python3 index_chromaDB.py --md-path document.md --source-tag "Мой документ"
-python3 index_chromaDB.py --md-path document.md --recreate  # пересоздать коллекцию
-```
-
-Опции:
-| Параметр | Описание |
-|---|---|
-| `--md-path` | Путь к Markdown-файлу |
-| `--source-tag` | Тег источника (по умолч. имя файла) |
-| `--collection` | Имя коллекции ChromaDB (по умолч. gost_docs_qwen) |
-| `--max-tokens` | Лимит чанка в токенах (по умолч. 8000) |
-| `--overlap-tokens` | Перекрытие между чанками (по умолч. 200) |
-| `--dry-run` | Только разбить на чанки, без эмбеддинга |
-| `--recreate` | Удалить коллекцию перед индексацией |
-| `--delete-old` | Удалить старые чанки с тем же source-tag |
-| `--api-key` | API-ключ SiliconFlow (или SILICONFLOW_API_KEY) |
-
----
-
-### index_search/search_chromaDB.py
-**Поиск по векторной базе знаний.**
-
-Двухэтапный поиск:
-1. **ChromaDB** — косинусная близость через Qwen3-Embedding-8B (top-4)
-2. **Реранкер** — Qwen3-Reranker-8B (top-100 → top-4), автоматически включается при слабой уверенности эмбеддинга
-
-```bash
-./search_chromaDB.py "допустимый ток кабеля 4х35 медь ПВХ"
-./search_chromaDB.py "запрос" --json
-./search_chromaDB.py "запрос" --force-rerank
-./search_chromaDB.py "запрос" --no-rerank
-./search_chromaDB.py --list-collections
-./search_chromaDB.py --test  # проверка связи с API
-```
-
----
-
 ## Конфигурация (config.yaml)
 
 ```yaml
@@ -198,21 +151,13 @@ python3 pdf_to_md.py -i test.pdf -o /tmp/test/ --mode auto
 ## Структура репозитория
 
 ```
-Electro/
-├── .gitignore
-├── CHANGELOG.md         # История версий
-├── LICENSE              # GPL v3
-├── README.md            # Этот файл
-├── Create_Markdown/
-│   ├── config.yaml      # Конфигурация (ключи удалены)
-│   ├── pdf_to_md.py     # PDF → Markdown
-│   ├── docx_to_md.py    # DOCX → Markdown
-│   ├── Create_Markdown.py # Пакетный режим
-│   ├── utils.py         # Общие функции
-│   └── tmp/             # Промежуточные файлы (в gitignore)
-└── index_search/        # RAG-индексация (отдельный проект)
-    ├── index_chromaDB.py
-    └── search_chromaDB.py
+Create_Markdown/
+├── config.yaml      # Конфигурация (ключи удалены)
+├── pdf_to_md.py     # PDF → Markdown
+├── docx_to_md.py    # DOCX → Markdown
+├── Create_Markdown.py # Пакетный режим
+├── utils.py         # Общие функции
+└── tmp/             # Промежуточные файлы (в gitignore)
 ```
 
 ---
