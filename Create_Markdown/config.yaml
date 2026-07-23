@@ -1,6 +1,12 @@
 # ═══════════════════════════════════════════════════════════════════════════
 # Конфигурация Create_Markdown (конвертация PDF/DOCX → Markdown)
 # ═══════════════════════════════════════════════════════════════════════════
+#
+# API-ключи задаются через переменные окружения:
+#   export PROVOD_API_KEY="sk-..."
+#
+# Либо в скрипте указать --config config.yaml, тогда ключи
+# берутся из config.yaml (НЕ храните ключи в git!).
 
 # ── Vision API (классификация изображений: формула или схема/график) ────
 # Используется для распознавания формул, встроенных в PDF/DOCX как картинки.
@@ -9,7 +15,7 @@ vision:
     # Провайдер: provod | openai | anthropic | openrouter
     provider: provod
     # API-ключ. Указывать явно (не через переменную окружения)
-    api_key: sk_b24c08ee2be90d958fe7cca65ee37dabe18eeddc95a1fab3
+    # api_key: "sk-..."  # ⚠ Удалён из репозитория — задайте свой
     # Базовый URL API (для provod: https://api.provod.ai/v1, openai: https://api.openai.com/v1)
     base_url: https://api.provod.ai/v1
     # Модель для Vision-классификации
@@ -18,7 +24,7 @@ vision:
     # Резервная модель (если primary недоступна)
     # Может быть через другого провайдера
     provider: provod
-    api_key: sk_b24c08ee2be90d958fe7cca65ee37dabe18eeddc95a1fab3
+    # api_key: "sk-..."  # ⚠ Удалён из репозитория — задайте свой
     base_url: https://api.provod.ai/v1/chat/completions
     model: anthropic/claude-sonnet-5
 
@@ -26,13 +32,13 @@ vision:
 postprocess:
   primary:
     provider: provod
-    api_key: sk_b24c08ee2be90d958fe7cca65ee37dabe18eeddc95a1fab3
+    # api_key: "sk-..."  # ⚠ Удалён из репозитория — задайте свой
     base_url: https://api.provod.ai/v1
     # Модель для текстовой постобработки (рекомендуется: anthropic/claude-sonnet-5)
     model: google/gemini-3.5-flash
   fallback:
     provider: provod
-    api_key: sk_b24c08ee2be90d958fe7cca65ee37dabe18eeddc95a1fab3
+    # api_key: "sk-..."  # ⚠ Удалён из репозитория — задайте свой
     base_url: https://api.provod.ai/v1/chat/completions
     model: anthropic/claude-sonnet-4.6
 
